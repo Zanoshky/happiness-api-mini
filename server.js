@@ -2,7 +2,7 @@ const body_parser = require("body-parser");
 const express = require("express");
 const server = express();
 
-const port = 9000;
+const port = +(process.env.PORT || 9000);
 
 const sqlite3 = require("sqlite3").verbose();
 const DBSOURCE = "./data/db.sqlite";
