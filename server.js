@@ -1,6 +1,7 @@
-const body_parser = require("body-parser");
+const bodyParser = require("body-parser");
 const express = require("express");
 const server = express();
+var cors = require("cors");
 
 const port = +(process.env.PORT || 9000);
 
@@ -22,6 +23,7 @@ const db = new sqlite3.Database(DBSOURCE, err => {
          temperature numeric, 
          gas numeric, 
          dust numeric, 
+         pressure numeric,
          volume numeric, 
          light numeric, 
          primary key (id))`,
@@ -36,8 +38,11 @@ const db = new sqlite3.Database(DBSOURCE, err => {
   }
 });
 
-// parse JSON (application/json content-type)
-server.use(body_parser.json());
+// Parse JSON (application/json content-type)
+server.use(bodyParser.json());
+
+// Use Cross Origin Resource
+server.use(cors());
 
 // API
 server.get("/", (req, res) => {
@@ -68,7 +73,7 @@ server.get(
   "/measurements/:homebaseId/:humidity/:temperature/:dust/:gas/:pressure/:volume/:light",
   (req, res) => {
     const insertQuery =
-      "INSERT INTO measurements(homebaseId, humidity, temperature, dust, gas, volume, light) VALUES(?, ?, ?, ?, ?, ?, ?)";
+      "INSERT INTO measurements(homebaseId, humidity, temperature, dust, gas, pressure, volume, light) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
     db.run(
       insertQuery,
       [
@@ -77,6 +82,7 @@ server.get(
         req.params.temperature,
         req.params.dust,
         req.params.gas,
+        req.params.pressure,
         req.params.volume,
         req.params.light
       ],
