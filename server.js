@@ -41,12 +41,12 @@ server.use(body_parser.json());
 
 // API
 server.get("/", (req, res) => {
-  res.json({ status: "ack" });
+  res.json({ serverHealth: "ack" });
 });
 
 // API Health
 server.get("/health", (req, res) => {
-  res.json({ health: "ack" });
+  res.json({ apiHealth: "ack" });
 });
 
 // DB Health
@@ -58,7 +58,7 @@ server.get("/db-health", (req, res) => {
     if (err) {
       res.status(BAD_REQUEST).json({ error: err.message });
     } else {
-      res.json({ health: "ack" });
+      res.json({ dataHealth: "ack" });
     }
   });
 });
