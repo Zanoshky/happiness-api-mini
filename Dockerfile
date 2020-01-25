@@ -21,7 +21,7 @@ RUN npm install
 COPY --chown=node . .
 
 # Bind to all network interfaces so that it can be mapped to the host OS
-ENV HOST=0.0.0.0 PORT=9443 NODE_ENV=production
+ENV PORT=9443 NODE_ENV=production
 
 EXPOSE ${PORT}
-CMD [ "node", "." ]
+CMD [ "./node_modules/.bin/nodemon", "server.js" ]
