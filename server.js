@@ -107,6 +107,7 @@ server.get("/status/:homebaseId", (req, res) => {
     if (err) {
       res.status(BAD_REQUEST).json({ error: err.message });
     } else {
+      rows[0].happiness = 100;
       res.json(rows);
     }
   });
