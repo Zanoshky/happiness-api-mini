@@ -107,8 +107,74 @@ server.get("/status/:homebaseId", (req, res) => {
     if (err) {
       res.status(BAD_REQUEST).json({ error: err.message });
     } else {
-      rows[0].happiness = 100;
-      res.json(rows);
+      if (rows[0]) {
+        const results = [];
+
+        const lightChart = { id: "Light", data: [] };
+        const volumeChart = { id: "Volume", data: [] };
+        const temperatureChart = { id: "Temprature", data: [] };
+        const humidityChart = { id: "Humidity", data: [] };
+        const dustChart = { id: "Dust", data: [] };
+        const gasChart = { id: "Gas", data: [] };
+        const pressureChart = { id: "Pressure", data: [] };
+        const happinessChart = { id: "Happiness", data: [] };
+
+        rows.forEach(measurement => {
+          const lightEntry = {
+            y: measurement.light
+          };
+          lightChart.data.push(lightEntry);
+
+          const volumeEntry = {
+            y: measurement.volume
+          };
+          volumeChart.data.push(volumeEntry);
+
+          const temperatureEntry = {
+            y: measurement.temperature
+          };
+          temperatureChart.data.push(temperatureEntry);
+
+          const humidityEntry = {
+            y: measurement.humidity
+          };
+          humidityChart.data.push(humidityEntry);
+
+          const dustEntry = {
+            y: measurement.dust
+          };
+          dustChart.data.push(dustEntry);
+
+          const gasEntry = {
+            y: measurement.gas
+          };
+          gasChart.data.push(gasEntry);
+
+          const pressureEntry = {
+            y: measurement.pressurer
+          };
+          pressureChart.data.push(pressureEntry);
+
+          const happyStatus = {
+            y: 100
+          };
+
+          happinessChart.data.push(happyStatus);
+        });
+
+        results.push(
+          lightChart,
+          volumeChart,
+          temperatureChart,
+          dustChart,
+          gasChart,
+          humidityChart,
+          pressureChart,
+          happinessChart
+        );
+
+        res.json(results);
+      }
     }
   });
 });
