@@ -46,11 +46,13 @@ server.use(cors());
 
 // API
 server.get("/", (req, res) => {
+  console.log("GET /", req);
   res.json({ serverHealth: "ack" });
 });
 
 // API Health
 server.get("/health", (req, res) => {
+  console.log("GET /health", req);
   res.json({ apiHealth: "ack" });
 });
 
@@ -72,6 +74,8 @@ server.get("/db-health", (req, res) => {
 server.get(
   "/measurements/:homebaseId/:humidity/:temperature/:dust/:gas/:pressure/:volume/:light",
   (req, res) => {
+    console.log("GET /measurements", req);
+
     const insertQuery =
       "INSERT INTO measurements(homebaseId, humidity, temperature, dust, gas, pressure, volume, light) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
     db.run(
@@ -99,6 +103,7 @@ server.get(
 
 // Get latest status
 server.get("/status/:homebaseId", (req, res) => {
+  console.log("GET /status", req);
   const sql =
     "SELECT * FROM measurements WHERE homebaseId = ? ORDER BY timestamp DESC LIMIT 1";
   const params = [req.params.homebaseId];
@@ -161,6 +166,30 @@ server.get("/status/:homebaseId", (req, res) => {
 
           happinessChart.data.push(happyStatus);
         });
+
+        results.push(
+          lightChart,
+          volumeChart,
+          temperatureChart,
+          dustChart,
+          gasChart,
+          humidityChart,
+          pressureChart,
+          happinessChart
+        );
+
+        res.json(results);
+      } else {
+        const results = [];
+
+        const lightChart = { id: "Light", data: [] };
+        const volumeChart = { id: "Volume", data: [] };
+        const temperatureChart = { id: "Temprature", data: [] };
+        const humidityChart = { id: "Humidity", data: [] };
+        const dustChart = { id: "Dust", data: [] };
+        const gasChart = { id: "Gas", data: [] };
+        const pressureChart = { id: "Pressure", data: [] };
+        const happinessChart = { id: "Happiness", data: [] };
 
         results.push(
           lightChart,
